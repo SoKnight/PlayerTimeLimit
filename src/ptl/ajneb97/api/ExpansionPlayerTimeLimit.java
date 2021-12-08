@@ -88,7 +88,7 @@ public class ExpansionPlayerTimeLimit extends PlaceholderExpansion {
      * <br>Since version 2.9.1 can you use OfflinePlayers in your requests.
      *
      * @param  player
-     *         A {@link org.bukkit.Player Player}.
+     *         A {@link Player Player}.
      * @param  identifier
      *         A String containing the identifier/value.
      *

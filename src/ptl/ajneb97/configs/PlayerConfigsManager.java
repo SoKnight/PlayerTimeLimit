@@ -13,13 +13,13 @@ import ptl.ajneb97.PlayerTimeLimit;
 import ptl.ajneb97.model.TimeLimitPlayer;
 
 public class PlayerConfigsManager {
-	
-	private ArrayList<PlayerConfig> configPlayers;
-	private PlayerTimeLimit plugin;
+
+	private final PlayerTimeLimit plugin;
+	private final List<PlayerConfig> configPlayers;
 	
 	public PlayerConfigsManager(PlayerTimeLimit plugin) {
 		this.plugin = plugin;
-		this.configPlayers = new ArrayList<PlayerConfig>();
+		this.configPlayers = new ArrayList<>();
 	}
 	
 	public void configurar() {
@@ -35,14 +35,13 @@ public class PlayerConfigsManager {
             if(!folder.exists()){
                 folder.mkdirs();
             }
-        } catch(SecurityException e) {
-            folder = null;
-        }
+        } catch(SecurityException ignored) {
+		}
 	}
 	
 	public void savePlayers() {
-		for(int i=0;i<configPlayers.size();i++) {
-			configPlayers.get(i).savePlayerConfig();
+		for (PlayerConfig configPlayer : configPlayers) {
+			configPlayer.savePlayerConfig();
 		}
 	}
 	
@@ -50,23 +49,23 @@ public class PlayerConfigsManager {
 		String path = plugin.getDataFolder() + File.separator + "players";
 		File folder = new File(path);
 		File[] listOfFiles = folder.listFiles();
-		for (int i=0;i<listOfFiles.length;i++) {
-			if(listOfFiles[i].isFile()) {
-		        String pathName = listOfFiles[i].getName();
-		        PlayerConfig config = new PlayerConfig(pathName,plugin);
-		        config.registerPlayerConfig();
-		        configPlayers.add(config);
-		    }
+		for (File listOfFile : listOfFiles) {
+			if (listOfFile.isFile()) {
+				String pathName = listOfFile.getName();
+				PlayerConfig config = new PlayerConfig(pathName, plugin);
+				config.registerPlayerConfig();
+				configPlayers.add(config);
+			}
 		}
 	}
 	
-	public ArrayList<PlayerConfig> getConfigPlayers(){
+	public List<PlayerConfig> getConfigPlayers(){
 		return this.configPlayers;
 	}
 	
 	public boolean archivoYaRegistrado(String pathName) {
-		for(int i=0;i<configPlayers.size();i++) {
-			if(configPlayers.get(i).getPath().equals(pathName)) {
+		for (PlayerConfig configPlayer : configPlayers) {
+			if (configPlayer.getPath().equals(pathName)) {
 				return true;
 			}
 		}
@@ -74,15 +73,15 @@ public class PlayerConfigsManager {
 	}
 	
 	public PlayerConfig getPlayerConfig(String pathName) {
-		for(int i=0;i<configPlayers.size();i++) {
-			if(configPlayers.get(i).getPath().equals(pathName)) {
-				return configPlayers.get(i);
+		for (PlayerConfig configPlayer : configPlayers) {
+			if (configPlayer.getPath().equals(pathName)) {
+				return configPlayer;
 			}
 		}
 		return null;
 	}
 	
-	public ArrayList<PlayerConfig> getPlayerConfigs() {
+	public List<PlayerConfig> getPlayerConfigs() {
 		return this.configPlayers;
 	}
 	
@@ -106,7 +105,7 @@ public class PlayerConfigsManager {
 	}
 	
 	public void cargarJugadores() {
-		ArrayList<TimeLimitPlayer> jugadores = new ArrayList<TimeLimitPlayer>();
+		List<TimeLimitPlayer> jugadores = new ArrayList<>();
 		
 		for(PlayerConfig playerConfig : configPlayers) {
 			FileConfiguration players = playerConfig.getConfig();

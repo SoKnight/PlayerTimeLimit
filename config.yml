@@ -3,6 +3,7 @@ time_limits:
   default: 3600
   vip: 7200
   op: 0
+time_accuracy: hours
 world_whitelist_system:
   enabled: false
   worlds:

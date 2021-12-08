@@ -18,7 +18,7 @@ import ptl.ajneb97.utils.UtilsTime;
 
 public class ServerManager {
 
-	private PlayerTimeLimit plugin;
+	private final PlayerTimeLimit plugin;
 	
 	public ServerManager(PlayerTimeLimit plugin) {
 		this.plugin = plugin;
@@ -54,7 +54,7 @@ public class ServerManager {
 		long finalMillis = UtilsTime.getNextResetMillis(resetTimeHour);
 		long remainingMillis = finalMillis-System.currentTimeMillis();
 		long segundos = remainingMillis/1000;
-		return UtilsTime.getTime(segundos, plugin.getMensajesManager());
+		return UtilsTime.getTime(segundos, plugin.getConfigsManager().getMainConfigManager(), plugin.getMensajesManager());
 	}
 	
 	public boolean isValidWorld(World world) {
@@ -64,10 +64,6 @@ public class ServerManager {
 		}
 		
 		List<String> worlds = mainConfig.getWorldWhitelistWorlds();
-		if(worlds.contains(world.getName())) {
-			return true;
-		}
-		
-		return false;
+		return worlds.contains(world.getName());
 	}
 }

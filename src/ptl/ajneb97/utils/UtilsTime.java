@@ -1,38 +1,49 @@
 package ptl.ajneb97.utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import org.bukkit.Bukkit;
-
+import ptl.ajneb97.configs.MainConfigManager;
+import ptl.ajneb97.configs.TimeAccuracy;
 import ptl.ajneb97.managers.MensajesManager;
 
 public class UtilsTime {
 
-	public static String getTime(long segundos,MensajesManager msgManager) {
-		long esperatotalmin = segundos/60;
-		long esperatotalhour = esperatotalmin/60;
-		long esperatotalday = esperatotalhour/24;
-		if(segundos > 59){
-			segundos = segundos - 60*esperatotalmin;
-		}
-		String time = segundos+msgManager.getTimeSeconds();		    		
-		if(esperatotalmin > 59){
-			esperatotalmin = esperatotalmin - 60*esperatotalhour;
-		}	
-		if(esperatotalmin > 0){
-			time = esperatotalmin+msgManager.getTimeMinutes()+" "+time;
-		}
-		if(esperatotalhour > 24) {
-			esperatotalhour = esperatotalhour - 24*esperatotalday;
-		}
-		if(esperatotalhour > 0){
-			time = esperatotalhour+msgManager.getTimeHours()+" " + time;
-		}
-		if(esperatotalday > 0) {
-			time = esperatotalday+msgManager.getTimeDays()+" " + time;
-		}
+	public static String getTime(long seconds, MainConfigManager mainConfig, MensajesManager msgManager) {
+		long days = seconds / 86400;
+		seconds %= 86400;
 
-		return time;
+		long hours = seconds / 3600;
+		seconds %= 3600;
+
+		long minutes = seconds / 60;
+		seconds %= 60;
+
+		List<String> timeParts = new ArrayList<>();
+		TimeAccuracy accuracy = mainConfig.getTimeAccuracy();
+
+		days = accuracy.roundAmount(TimeAccuracy.DAYS, days);
+		hours = accuracy.roundAmount(TimeAccuracy.HOURS, hours);
+		minutes = accuracy.roundAmount(TimeAccuracy.MINUTES, minutes);
+		seconds = accuracy.roundAmount(TimeAccuracy.SECONDS, seconds);
+
+		if(days > 0)
+			timeParts.add(msgManager.getTimeFormatDays().replace("%amount%", String.valueOf(days)));
+
+		if(hours > 0)
+			timeParts.add(msgManager.getTimeFormatHours().replace("%amount%", String.valueOf(hours)));
+
+		if(minutes > 0)
+			timeParts.add(msgManager.getTimeFormatMinutes().replace("%amount%", String.valueOf(minutes)));
+
+		if(seconds > 0)
+			timeParts.add(msgManager.getTimeFormatSeconds().replace("%amount%", String.valueOf(seconds)));
+
+		if(timeParts.isEmpty())
+			timeParts.add(msgManager.getTimeNoMore());
+
+		return String.join(msgManager.getTimeSeparator(), timeParts);
 	}
 	
 	//Devuelve los millis del proximo reinicio de tiempo
@@ -52,20 +63,19 @@ public class UtilsTime {
 		
 		Calendar calendar = Calendar.getInstance();
 	    calendar.setTimeInMillis(currentMillis);
-	    calendar.set(Calendar.HOUR_OF_DAY, Integer.valueOf(hour));
-	    calendar.set(Calendar.MINUTE, Integer.valueOf(minute));
+	    calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
+	    calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
 	    calendar.set(Calendar.SECOND, 0);
 	    
 	    if(calendar.getTimeInMillis() >= currentMillis) {
 	    	//Aun no llega a la hora de reinicio en el dia
 	    	//Bukkit.getConsoleSender().sendMessage("Hora reinicio: "+hour+":"+minute+"   | Aun no pasa");
-	    	return calendar.getTimeInMillis();
-	    }else {
+		}else {
 	    	//La hora de reinicio ya paso en el dia
 	    	//Bukkit.getConsoleSender().sendMessage("Hora reinicio: "+hour+":"+minute+"   | Ya paso");
 	    	calendar.add(Calendar.DAY_OF_YEAR, 1);
 	    	//Bukkit.getConsoleSender().sendMessage("Nueva fecha: "+calendar.toString());
-	    	return calendar.getTimeInMillis();
-	    }
+		}
+		return calendar.getTimeInMillis();
 	}
 }

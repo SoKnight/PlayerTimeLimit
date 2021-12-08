@@ -4,6 +4,7 @@ package ptl.ajneb97.configs;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -11,10 +12,13 @@ import ptl.ajneb97.PlayerTimeLimit;
 import ptl.ajneb97.configs.others.Notification;
 import ptl.ajneb97.configs.others.TimeLimit;
 
+@Getter
 public class MainConfigManager {
 
-	private PlayerTimeLimit plugin;
+	private final PlayerTimeLimit plugin;
+
 	private ArrayList<TimeLimit> timeLimits;
+	private TimeAccuracy timeAccuracy;
 	private boolean actionBar;
 	private boolean bossBar;
 	private String bossBarColor;
@@ -31,13 +35,14 @@ public class MainConfigManager {
 	public void configurar() {
 		FileConfiguration config = plugin.getConfig();
 
-		timeLimits = new ArrayList<TimeLimit>();
-		notifications = new ArrayList<Notification>();
+		timeLimits = new ArrayList<>();
+		notifications = new ArrayList<>();
 		for(String key : config.getConfigurationSection("time_limits").getKeys(false)) {
 			int time = config.getInt("time_limits."+key);
 			TimeLimit timeLimit = new TimeLimit(key,time);
 			timeLimits.add(timeLimit);
 		}
+		timeAccuracy = TimeAccuracy.valueOf(config.getString("time_accuracy"));
 		actionBar = config.getBoolean("action_bar");
 		bossBar = config.getBoolean("boss_bar.enabled");
 		bossBarColor = config.getString("boss_bar.color");
@@ -50,7 +55,7 @@ public class MainConfigManager {
 		
 		if(config.contains("notification")) {
 			for(String key : config.getConfigurationSection("notification").getKeys(false)) {
-				int seconds = Integer.valueOf(key);
+				int seconds = Integer.parseInt(key);
 				List<String> message = null;
 				if(config.contains("notification."+key+".message")) {
 					message = config.getStringList("notification."+key+".message");
@@ -62,36 +67,6 @@ public class MainConfigManager {
 		}
 	}
 
-	public boolean isActionBar() {
-		return actionBar;
-	}
-	public boolean isBossBar() {
-		return bossBar;
-	}
-	public String getBossBarColor() {
-		return bossBarColor;
-	}
-	public String getBossBarStyle() {
-		return bossBarStyle;
-	}
-	public String getResetTime() {
-		return resetTime;
-	}
-	public ArrayList<TimeLimit> getTimeLimits() {
-		return timeLimits;
-	}
-	public boolean isWorldWhitelistEnabled() {
-		return worldWhitelistEnabled;
-	}
-	public List<String> getWorldWhitelistWorlds() {
-		return worldWhitelistWorlds;
-	}
-	public String getWorldWhitelistTeleportCoordinates() {
-		return worldWhitelistTeleportCoordinates;
-	}
-	public ArrayList<Notification> getNotifications() {
-		return notifications;
-	}
 	public Notification getNotificationAtTime(int seconds) {
 		for(Notification n : notifications) {
 			if(n.getSeconds() == seconds) {
@@ -100,4 +75,5 @@ public class MainConfigManager {
 		}
 		return null;
 	}
+
 }

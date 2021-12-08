@@ -3,6 +3,8 @@ package ptl.ajneb97.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,22 +20,18 @@ import ptl.ajneb97.configs.others.TimeLimit;
 import ptl.ajneb97.model.TimeLimitPlayer;
 import ptl.ajneb97.utils.UtilsTime;
 
+@Getter
+@Setter
 public class PlayerManager {
 
-	private ArrayList<TimeLimitPlayer> players;
-	private PlayerTimeLimit plugin;
-	
-	public PlayerManager(PlayerTimeLimit plugin) {
+	private final PlayerTimeLimit plugin;
+	private final MainConfigManager mainConfig;
+	private List<TimeLimitPlayer> players;
+
+	public PlayerManager(PlayerTimeLimit plugin, MainConfigManager mainConfig) {
 		this.plugin = plugin;
-		this.players = new ArrayList<TimeLimitPlayer>();
-	}
-
-	public ArrayList<TimeLimitPlayer> getPlayers() {
-		return players;
-	}
-
-	public void setPlayers(ArrayList<TimeLimitPlayer> players) {
-		this.players = players;
+		this.mainConfig = mainConfig;
+		this.players = new ArrayList<>();
 	}
 	
 	public TimeLimitPlayer getPlayerByUUID(String uuid) {
@@ -80,12 +78,7 @@ public class PlayerManager {
 				}
 				
 				List<String> msg = messages.getStringList("kickMessage");
-				String finalMessage = "";
-				for(String line : msg) {
-					finalMessage = finalMessage+line+"\n";
-				}
-				finalMessage = MensajesManager.getMensajeColor(finalMessage);
-				player.kickPlayer(finalMessage);
+				player.kickPlayer(MensajesManager.getMensajeColor(String.join("\n", msg)));
 			}
 		}.runTask(plugin);
 	}
@@ -99,10 +92,7 @@ public class PlayerManager {
 	public boolean hasTimeLeft(TimeLimitPlayer p) {
 		int currentTime = p.getCurrentTime();
 		int timeLimit = getTimeLimitPlayer(p.getPlayer());
-		if(currentTime < timeLimit || timeLimit == 0) {
-			return true;
-		}
-		return false;
+		return currentTime < timeLimit || timeLimit == 0;
 	}
 	
 	public int getTimeLimitPlayer(Player player) {
@@ -134,11 +124,11 @@ public class PlayerManager {
 	public String getTimeLeft(TimeLimitPlayer p,int timeLimit) {
 		MensajesManager msgManager = plugin.getMensajesManager();
 		int remainingTime = timeLimit-p.getCurrentTime();
-		String timeString = "";
+		String timeString;
 		if(timeLimit == 0) {
 			timeString = msgManager.getTimeInfinite();
 		}else {
-			timeString = UtilsTime.getTime(remainingTime,msgManager);
+			timeString = UtilsTime.getTime(remainingTime, mainConfig, msgManager);
 		}
 		return timeString;
 	}
@@ -149,11 +139,11 @@ public class PlayerManager {
 		try {
 			String[] sep = coordinates.split(";");
 			World world = Bukkit.getWorld(sep[0]);
-			double x = Double.valueOf(sep[1]);
-			double y = Double.valueOf(sep[2]);
-			double z = Double.valueOf(sep[3]);
-			float yaw = Float.valueOf(sep[4]);
-			float pitch = Float.valueOf(sep[5]);
+			double x = Double.parseDouble(sep[1]);
+			double y = Double.parseDouble(sep[2]);
+			double z = Double.parseDouble(sep[3]);
+			float yaw = Float.parseFloat(sep[4]);
+			float pitch = Float.parseFloat(sep[5]);
 			
 			player.teleport(new Location(world,x,y,z,yaw,pitch));
 			
@@ -163,7 +153,7 @@ public class PlayerManager {
 				player.sendMessage(MensajesManager.getMensajeColor(m));
 			}
 		}catch(Exception e) {
-			player.sendMessage(plugin.nombrePlugin+" &cError! Impossible to teleport &7"+player.getName()
+			player.sendMessage(PlayerTimeLimit.nombrePlugin +" &cError! Impossible to teleport &7"+player.getName()
 			+" &cto this coordinates: &7"+coordinates);
 		}
 	}

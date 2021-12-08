@@ -3,81 +3,33 @@ package ptl.ajneb97.managers;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import net.md_5.bungee.api.ChatColor;
 import ptl.ajneb97.libs.centeredmessages.DefaultFontInfo;
 
+@Getter
+@Setter
+@AllArgsConstructor
 public class MensajesManager {
 	
-	private String prefix;
+	private final String prefix;
 	private String actionBarMessage;
 	private String bossBarMessage;
-	private String timeSeconds;
-	private String timeMinutes;
-	private String timeHours;
-	private String timeDays;
+	private String timeFormatDays;
+	private String timeFormatHours;
+	private String timeFormatMinutes;
+	private String timeFormatSeconds;
+	private String timeSeparator;
+	private String timeNoMore;
 	private String timeInfinite;
 	
 	public MensajesManager(String prefix) {
 		this.prefix = prefix;
-	}
-
-	public String getActionBarMessage() {
-		return actionBarMessage;
-	}
-
-	public void setActionBarMessage(String actionBarMessage) {
-		this.actionBarMessage = actionBarMessage;
-	}
-
-	public String getBossBarMessage() {
-		return bossBarMessage;
-	}
-
-	public void setBossBarMessage(String bossBarMessage) {
-		this.bossBarMessage = bossBarMessage;
-	}
-
-	public String getTimeSeconds() {
-		return timeSeconds;
-	}
-
-	public void setTimeSeconds(String timeSeconds) {
-		this.timeSeconds = timeSeconds;
-	}
-
-	public String getTimeMinutes() {
-		return timeMinutes;
-	}
-
-	public void setTimeMinutes(String timeMinutes) {
-		this.timeMinutes = timeMinutes;
-	}
-
-	public String getTimeHours() {
-		return timeHours;
-	}
-
-	public void setTimeHours(String timeHours) {
-		this.timeHours = timeHours;
-	}
-
-	public String getTimeDays() {
-		return timeDays;
-	}
-
-	public void setTimeDays(String timeDays) {
-		this.timeDays = timeDays;
-	}
-
-	public String getTimeInfinite() {
-		return timeInfinite;
-	}
-
-	public void setTimeInfinite(String timeInfinite) {
-		this.timeInfinite = timeInfinite;
 	}
 
 	public void enviarMensaje(CommandSender jugador,String mensaje,boolean prefix) {

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -33,13 +34,19 @@ public class MensajesConfigManager {
 		MensajesManager msgManager = new MensajesManager(messages.getString("prefix"));
 		msgManager.setActionBarMessage(messages.getString("actionBarMessage"));
 		msgManager.setBossBarMessage(messages.getString("bossBarMessage"));
-		msgManager.setTimeSeconds(messages.getString("timeSeconds"));
-		msgManager.setTimeMinutes(messages.getString("timeMinutes"));
-		msgManager.setTimeHours(messages.getString("timeHours"));
-		msgManager.setTimeDays(messages.getString("timeDays"));
-		msgManager.setTimeInfinite(messages.getString("timeInfinite"));
+		msgManager.setTimeFormatDays(colorize(messages.getString("timeFormat.days", "")));
+		msgManager.setTimeFormatHours(colorize(messages.getString("timeFormat.hours", "")));
+		msgManager.setTimeFormatMinutes(colorize(messages.getString("timeFormat.minutes", "")));
+		msgManager.setTimeFormatSeconds(colorize(messages.getString("timeFormat.seconds", "")));
+		msgManager.setTimeSeparator(colorize(messages.getString("timeSeparator", "")));
+		msgManager.setTimeNoMore(colorize(messages.getString("timeNoMore", "")));
+		msgManager.setTimeInfinite(colorize(messages.getString("timeInfinite", "")));
 		
 		this.plugin.setMensajesManager(msgManager);
+	}
+
+	private String colorize(String string) {
+		return string != null && !string.isEmpty() ? ChatColor.translateAlternateColorCodes('&', string) : string;
 	}
 	
 	public void registerMessages(){
