@@ -31,7 +31,7 @@ public class MensajesConfigManager {
 	
 	public void setMessages() {
 		FileConfiguration messages = getMessages();
-		MensajesManager msgManager = new MensajesManager(messages.getString("prefix"));
+		MensajesManager msgManager = new MensajesManager(plugin, messages.getString("prefix"));
 		msgManager.setActionBarMessage(messages.getString("actionBarMessage"));
 		msgManager.setBossBarMessage(messages.getString("bossBarMessage"));
 		msgManager.setTimeFormatDays(colorize(messages.getString("timeFormat.days", "")));

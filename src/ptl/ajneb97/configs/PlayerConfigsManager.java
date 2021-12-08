@@ -25,7 +25,6 @@ public class PlayerConfigsManager {
 	public void configurar() {
 		createPlayersFolder();
 		registerPlayers();
-		cargarJugadores();
 	}
 	
 	public void createPlayersFolder(){

@@ -52,11 +52,13 @@ public class PlayerTimeLimit extends JavaPlugin {
     public static String nombrePlugin = ChatColor.translateAlternateColorCodes('&', "&8[&bPlayerTime&cLimit&8] ");
 
     public void onEnable(){
+        this.playerManager = new PlayerManager(this);
+        this.serverManager = new ServerManager(this);
+
         this.configsManager = new ConfigsManager(this);
         this.configsManager.configurar();
 
-        this.playerManager = new PlayerManager(this, configsManager.getMainConfigManager());
-        this.serverManager = new ServerManager(this);
+        configsManager.getPlayerConfigsManager().cargarJugadores();
 
         registerEvents();
         registerCommands();
@@ -84,7 +86,6 @@ public class PlayerTimeLimit extends JavaPlugin {
     public void onDisable(){
         this.configsManager.getPlayerConfigsManager().guardarJugadores();
         serverManager.saveDataTime();
-        Bukkit.getConsoleSender().sendMessage(nombrePlugin+ChatColor.YELLOW + "Has been disabled! " + ChatColor.WHITE + "Version: " + version);
     }
 
     public void registerCommands(){

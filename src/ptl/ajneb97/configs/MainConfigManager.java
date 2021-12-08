@@ -42,7 +42,7 @@ public class MainConfigManager {
 			TimeLimit timeLimit = new TimeLimit(key,time);
 			timeLimits.add(timeLimit);
 		}
-		timeAccuracy = TimeAccuracy.valueOf(config.getString("time_accuracy"));
+		timeAccuracy = TimeAccuracy.getByKey(config.getString("time_accuracy"));
 		actionBar = config.getBoolean("action_bar");
 		bossBar = config.getBoolean("boss_bar.enabled");
 		bossBarColor = config.getString("boss_bar.color");

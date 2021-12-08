@@ -5,19 +5,24 @@ import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import net.md_5.bungee.api.ChatColor;
+import ptl.ajneb97.PlayerTimeLimit;
 import ptl.ajneb97.libs.centeredmessages.DefaultFontInfo;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MensajesManager {
-	
+
+	private final PlayerTimeLimit plugin;
 	private final String prefix;
+
 	private String actionBarMessage;
 	private String bossBarMessage;
 	private String timeFormatDays;
@@ -27,10 +32,6 @@ public class MensajesManager {
 	private String timeSeparator;
 	private String timeNoMore;
 	private String timeInfinite;
-	
-	public MensajesManager(String prefix) {
-		this.prefix = prefix;
-	}
 
 	public void enviarMensaje(CommandSender jugador,String mensaje,boolean prefix) {
 		if(!mensaje.isEmpty()) {

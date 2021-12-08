@@ -54,7 +54,7 @@ public class ServerManager {
 		long finalMillis = UtilsTime.getNextResetMillis(resetTimeHour);
 		long remainingMillis = finalMillis-System.currentTimeMillis();
 		long segundos = remainingMillis/1000;
-		return UtilsTime.getTime(segundos, plugin.getConfigsManager().getMainConfigManager(), plugin.getMensajesManager());
+		return UtilsTime.getTime(segundos, plugin.getMensajesManager());
 	}
 	
 	public boolean isValidWorld(World world) {

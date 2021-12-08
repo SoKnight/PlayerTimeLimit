@@ -10,7 +10,10 @@ import ptl.ajneb97.managers.MensajesManager;
 
 public class UtilsTime {
 
-	public static String getTime(long seconds, MainConfigManager mainConfig, MensajesManager msgManager) {
+	public static String getTime(long seconds, MensajesManager msgManager) {
+		if(seconds == 0)
+			return msgManager.getTimeInfinite();
+
 		long days = seconds / 86400;
 		seconds %= 86400;
 
@@ -21,7 +24,7 @@ public class UtilsTime {
 		seconds %= 60;
 
 		List<String> timeParts = new ArrayList<>();
-		TimeAccuracy accuracy = mainConfig.getTimeAccuracy();
+		TimeAccuracy accuracy = msgManager.getPlugin().getConfigsManager().getMainConfigManager().getTimeAccuracy();
 
 		days = accuracy.roundAmount(TimeAccuracy.DAYS, days);
 		hours = accuracy.roundAmount(TimeAccuracy.HOURS, hours);

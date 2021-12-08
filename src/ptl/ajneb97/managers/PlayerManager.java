@@ -25,12 +25,10 @@ import ptl.ajneb97.utils.UtilsTime;
 public class PlayerManager {
 
 	private final PlayerTimeLimit plugin;
-	private final MainConfigManager mainConfig;
 	private List<TimeLimitPlayer> players;
 
-	public PlayerManager(PlayerTimeLimit plugin, MainConfigManager mainConfig) {
+	public PlayerManager(PlayerTimeLimit plugin) {
 		this.plugin = plugin;
-		this.mainConfig = mainConfig;
 		this.players = new ArrayList<>();
 	}
 	
@@ -128,7 +126,7 @@ public class PlayerManager {
 		if(timeLimit == 0) {
 			timeString = msgManager.getTimeInfinite();
 		}else {
-			timeString = UtilsTime.getTime(remainingTime, mainConfig, msgManager);
+			timeString = UtilsTime.getTime(remainingTime, msgManager);
 		}
 		return timeString;
 	}

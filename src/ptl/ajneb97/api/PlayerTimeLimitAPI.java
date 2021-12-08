@@ -24,6 +24,6 @@ public class PlayerTimeLimitAPI {
 	public static String getTotalTime(Player player) {
 		PlayerManager playerManager = plugin.getPlayerManager();
 		TimeLimitPlayer p = playerManager.getPlayerByUUID(player.getUniqueId().toString());
-		return UtilsTime.getTime(p.getTotalTime(), plugin.getConfigsManager().getMainConfigManager(), plugin.getMensajesManager());
+		return UtilsTime.getTime(p.getTotalTime(), plugin.getMensajesManager());
 	}
 }

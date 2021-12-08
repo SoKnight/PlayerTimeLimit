@@ -151,7 +151,7 @@ public class Comando implements CommandExecutor {
 		PlayerManager playerManager = plugin.getPlayerManager();
 		int timeLimit = playerManager.getTimeLimitPlayer(player);
 		String timeLeft = playerManager.getTimeLeft(p, timeLimit);
-		String totalTime = UtilsTime.getTime(p.getTotalTime(), playerManager.getMainConfig(), msgManager);
+		String totalTime = UtilsTime.getTime(p.getTotalTime(), msgManager);
 		List<String> msg = messages.getStringList("checkCommandMessage");
 		for(String m : msg) {
 			player.sendMessage(MensajesManager.getMensajeColor(m.replace("%player%", p.getName())
